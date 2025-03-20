@@ -1,0 +1,59 @@
+import { Example } from '../examples/Example';
+
+# Examples
+
+## Uncontrolled
+
+When you want to let the hook manage the state, just pass an initial value and you're good to go.
+
+```tsx
+import { createTactileAdapter, useTactile } from 'layoutrageous';
+
+const adapter = createTactileAdapter();
+
+function Component() {
+    const instance = useTactile({
+        initialState: adapter.getInitialState(),
+    });
+
+    return <Dock instance={instance} />;
+}
+```
+
+## Controlled
+
+In the controlled case you are managing the state from outside.
+
+```tsx
+import { createTactileAdapter, useTactile } from 'layoutrageous';
+
+const adapter = createTactileAdapter();
+
+function Component() {
+    const [state, onStateChange] = React.useState(adapter.getInitialState());
+
+    const instance = useTactile({
+        state,
+        onStateChange,
+    });
+
+    return <Dock instance={instance} />;
+}
+```
+
+:::info
+Do not mix and match controlled and uncontrolled modes. It will lead to unexpected behavior.
+:::
+
+## Basic example
+
+In this example you can add tiles using the
+
+```tsx
+instance.addBestFitting();
+```
+
+method.
+
+<Example />
+

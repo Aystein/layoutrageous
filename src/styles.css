@@ -1,0 +1,106 @@
+.layoutrageous-Root-root {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+}
+
+.layoutrageous-Divider-root[data-orientation="horizontal"] {
+  height: 6px;
+  margin-top: -3px;
+  cursor: ns-resize;
+}
+
+.layoutrageous-Divider-root[data-orientation="vertical"] {
+  width: 6px;
+  margin-left: -3px;
+  cursor: ew-resize;
+}
+
+/*
+    This is the root element of the Divider component.
+*/
+.layoutrageous-Divider-root {
+  position: absolute;
+
+  &:hover {
+    --background-color: rgba(34, 139, 230, 0.1);
+  }
+
+  &:active {
+    --background-color: rgb(34, 139, 230);
+  }
+}
+
+/*
+    This is the inner element (visible line) of the Divider component.
+*/
+.layoutrageous-Divider-inner {
+  border-radius: 3px;
+  inset: 1px;
+  position: absolute;
+  background-color: var(--background-color);
+}
+
+.layoutrageous-Tile-header {
+  flex-shrink: 0;
+  height: 32px;
+  border-bottom: 1px solid #dee2e6;
+}
+
+.layoutrageous-Tile-body {
+  flex-grow: 1;
+  overflow: hidden;
+  height: 0px;
+}
+
+.layoutrageous-Tile-root {
+  position: absolute;
+  margin: 3px;
+  display: flex;
+  overflow: hidden;
+  flex-direction: column;
+  border: 1px solid rgb(222, 226, 230);
+  border-radius: 4px;
+  background-color: white;
+}
+
+[data-draggable],
+[data-draggable]>* {
+  cursor: grab;
+  user-select: none;
+}
+
+.layoutrageous-Tile-root[data-dragging="true"] {
+  opacity: 1;
+  background: white;
+  position: fixed;
+  outline-color: rgba(9, 30, 66, 0.71);
+  outline-style: solid;
+  z-index: 1000;
+  transition-property: scale, outline-width, outline-color, box-shadow;
+  transition-timing-function: cubic-bezier(0.2, 0, 0, 1);
+  transition-duration: 0.35s;
+}
+
+.layoutrageous-Dock-root {
+  position: relative;
+  overflow: hidden;
+  flex-grow: 1;
+  margin: 3px;
+}
+
+.layoutrageous-Dropzone-root {
+  z-index: 1000;
+  background-color: rgba(128, 128, 128, 0.5);
+  box-shadow: 0px 0px 20px 10px rgba(128, 128, 128, 0.5);
+  padding: 4px;
+}
+
+.layoutrageous-Targetzone-root {
+  background-color: transparent;
+  border: 2px dashed black;
+  padding: 4px;
+  z-index: 1;
+}
