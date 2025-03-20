@@ -1,11 +1,11 @@
 import { Button, Center, CloseButton, Group, MantineProvider, Paper, Text } from '@mantine/core';
-import { useReactDivide, Dock } from 'layoutrageous';
+import { useLayout, Dock } from 'layoutrageous';
 
 import '@mantine/core/styles.css';
 import 'layoutrageous/styles.css';
 
 export function Example() {
-  const instance = useReactDivide({
+  const instance = useLayout({
     initialState: {
       ids: [],
       nodes: {},

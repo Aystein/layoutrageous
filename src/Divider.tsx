@@ -1,4 +1,4 @@
-import { DivideInstance } from './useReactDivide';
+import { LayoutInstance } from './useLayout';
 import { flushSync } from 'react-dom';
 import { clamp, DividerState } from './util';
 import { useInteractions } from './useInteractions';
@@ -12,7 +12,7 @@ export function Divider<T>({
   classNames,
 }: {
   value: DividerState;
-  instance: DivideInstance<T>;
+  instance: LayoutInstance<T>;
   boundingClientRect?: DOMRectReadOnly;
   classNames: ReactDivideProps<T>['dividerClassNames'];
 }) {
@@ -129,7 +129,7 @@ export function Divider<T>({
       }
     },
   });
-  console.log("test")
+
   return (
     <>
       <div

@@ -1,6 +1,6 @@
 import { DropRect, Pos } from './interfaces';
 import React from 'react';
-import { DivideInstance } from './useReactDivide';
+import { LayoutInstance } from './useLayout';
 import {
   createTactileAdapter,
   DivideContentNode,
@@ -27,7 +27,7 @@ export function Tile<T>({
   renderTile,
   renderHeader,
 }: {
-  instance: DivideInstance<T>;
+  instance: LayoutInstance<T>;
   node: DivideContentNode<T>;
   inset: { left: number; right: number; bottom: number; top: number };
   parentInlineSize: number;
@@ -54,6 +54,7 @@ export function Tile<T>({
     hoveredRect: -1,
     initialX: 0,
     initialY: 0,
+    timeoutHandle: -1,
   });
 
   React.useLayoutEffect(() => {
@@ -94,6 +95,10 @@ export function Tile<T>({
     throttle: true,
     minimumDragDistance: 2,
     shouldSkip: (event) => {
+      if (dragState.timeoutHandle !== -1) {
+        return true;
+      }
+
       const target = event.nativeEvent.target as HTMLElement;
       // filter out elements that do not have data-draggable attribute
       return (
@@ -150,13 +155,13 @@ export function Tile<T>({
               x: 0,
               y: 0,
             },
+            timeoutHandle: setTimeout(() => {
+              setDragState({
+                fadeOut: false,
+                timeoutHandle: -1,
+              });
+            }, ANIMATION_DURATION * 1000),
           });
-
-          setTimeout(() => {
-            setDragState({
-              fadeOut: false,
-            });
-          }, ANIMATION_DURATION * 1000);
         }
 
         onDragEnd();

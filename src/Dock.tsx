@@ -1,4 +1,4 @@
-import { DivideInstance } from './useReactDivide';
+import { LayoutInstance } from './useLayout';
 import React from 'react';
 import { Tile } from './Tile';
 import { createTactileAdapter, DivideContentNode } from './TreeAdapter';
@@ -8,7 +8,7 @@ import { produce } from 'immer';
 import { Divider } from './Divider';
 
 export type ReactDivideProps<T> = {
-  instance: DivideInstance<T>;
+  instance: LayoutInstance<T>;
   dividerClassNames?: Partial<{
     root: string;
     inner: string;

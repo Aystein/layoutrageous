@@ -9,19 +9,19 @@ export type Updater<T> = T | ((updater: T) => T);
 
 const divideAdapter = createTactileAdapter({});
 
-export interface DivideOptions<T> {
+export interface LayoutOptions<T> {
   onStateChange: (updater: Updater<TreeState<T>>) => void;
   state: Partial<TreeState<T>>;
   initialState: Partial<TreeState<T>>;
 }
 
-export interface DivideInstance<T> {
+export interface LayoutInstance<T> {
   initialState: TreeState<T>;
-  options: Partial<DivideOptions<T>>;
+  options: Partial<LayoutOptions<T>>;
 
   setState: (updater: Updater<TreeState<T>>) => void;
 
-  setOptions: (updater: Updater<Partial<DivideOptions<T>>>) => void;
+  setOptions: (updater: Updater<Partial<LayoutOptions<T>>>) => void;
 
   updateGrowthValues: (growthValues: Record<string, number>) => void;
   applyInsert: (
@@ -38,10 +38,10 @@ export interface DivideInstance<T> {
   getDeepCopy: () => TreeState<T>;
 }
 
-export function createReactDivide<T>(
-  options: Partial<DivideOptions<T>>,
-): DivideInstance<T> {
-  const coreInstance: DivideInstance<T> = {
+export function createLayout<T>(
+  options: Partial<LayoutOptions<T>>,
+): LayoutInstance<T> {
+  const coreInstance: LayoutInstance<T> = {
     options: {
       ...options,
     },
@@ -95,15 +95,15 @@ export function createReactDivide<T>(
   return coreInstance;
 }
 
-export function useReactDivide<T>(options: Partial<DivideOptions<T>>) {
-  const resolvedOptions: Partial<DivideOptions<T>> = {
+export function useLayout<T>(options: Partial<LayoutOptions<T>>) {
+  const resolvedOptions: Partial<LayoutOptions<T>> = {
     state: {},
-    onStateChange: () => {},
+    onStateChange: () => { },
     ...options,
   };
 
   const [tableRef] = React.useState(() => ({
-    current: createReactDivide(resolvedOptions),
+    current: createLayout(resolvedOptions),
   }));
 
   const [state, setState] = React.useState(() => ({

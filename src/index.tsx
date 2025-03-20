@@ -1,2 +1,2 @@
-export * from './useReactDivide';
+export * from './useLayout';
 export * from './Dock';
