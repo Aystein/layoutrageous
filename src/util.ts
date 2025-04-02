@@ -5,7 +5,7 @@ import {
   TreeState,
   Orientation,
   DivideNode,
-} from './TreeAdapter';
+} from './layoutAdapter';
 
 
 export function createContentNode<T>(

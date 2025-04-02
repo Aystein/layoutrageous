@@ -1,4 +1,4 @@
-import { DivideNode, Orientation, DivideContentNode } from "./TreeAdapter";
+import { DivideNode, Orientation, DivideContentNode } from "./layoutAdapter";
 
 
 export interface Rect {

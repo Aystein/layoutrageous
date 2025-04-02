@@ -2,17 +2,15 @@ import { DropRect, Pos } from './interfaces';
 import React from 'react';
 import { LayoutInstance } from './useLayout';
 import {
-  createTactileAdapter,
+  deleteTile,
   DivideContentNode,
-} from './TreeAdapter';
+} from './layoutAdapter';
 import { findClosestAncestorWithAttribute, measureNodes } from './util';
 import { useInteractions } from './useInteractions';
 import { useShallowState } from './useShallowState';
 import { ReactDivideProps } from './Dock';
 
 const ANIMATION_DURATION = 0.35;
-
-const adapter = createTactileAdapter({});
 
 export function Tile<T>({
   instance,
@@ -62,9 +60,7 @@ export function Tile<T>({
       // Clone tree
       const deepCopy = instance.getDeepCopy();
 
-      adapter.deleteNode(deepCopy, node.id);
-
-      // const measurements = recursiveMeasure(deepCopy);
+      deleteTile(deepCopy, node.id);
 
       setRects(
         measureNodes(

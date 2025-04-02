@@ -1,3 +1,20 @@
+import { Example } from './Example';
+import { Provider } from './Provider';
+
+# Basic
+
+## Basic example
+
+Below is a basic example that renders a header with a close button and a tile with some text. The tile can be dragged by the header or the text.
+
+<Provider>
+    <Example />
+</Provider>
+
+
+
+
+```ts
 import { Button, Center, CloseButton, Group, Paper, Text } from '@mantine/core';
 import { useLayout, Dock } from 'layoutrageous';
 
@@ -15,7 +32,7 @@ export function Example() {
   });
 
   return (
-    <>
+    <Paper w="100%" h="50vh" pos="relative" display="flex" bg="gray.0">
       <Dock
         instance={instance}
         renderHeader={(tile) => (
@@ -71,6 +88,8 @@ export function Example() {
           Reset
         </Button>
       </Group>
-    </>
+    </Paper>
   );
 }
+
+```

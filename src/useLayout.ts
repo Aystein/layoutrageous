@@ -1,13 +1,8 @@
-import React from 'react';
-import {
-  createTactileAdapter,
-  TreeState,
-} from './TreeAdapter';
-import { produce } from 'immer';
+import React from "react";
+import { applyInsert, TreeState, updateGrowthValues } from "./layoutAdapter";
+import { produce, WritableDraft } from "immer";
 
 export type Updater<T> = T | ((updater: T) => T);
-
-const divideAdapter = createTactileAdapter({});
 
 export interface LayoutOptions<T> {
   onStateChange: (updater: Updater<TreeState<T>>) => void;
@@ -27,19 +22,37 @@ export interface LayoutInstance<T> {
   applyInsert: (
     toMove: string,
     target: string,
-    direction: 'left' | 'right' | 'top' | 'bottom',
+    direction: "left" | "right" | "top" | "bottom"
   ) => void;
-  addBestFitting: (data: T) => void;
 
-  deleteNode: (id: string) => void;
   getState: () => TreeState<T>;
 
   // Returns a deep copy of the current state
   getDeepCopy: () => TreeState<T>;
+
+  /**
+   * Generates a new state by applying an updater function to a draft of the current state.
+   * The updater function operates on an Immer draft, allowing direct mutations
+   * without modifying the actual state.
+   *
+   * @param updater A function that mutates the draft state.
+   */
+  produce: (updater: (draft: WritableDraft<TreeState<T>>) => void) => void;
+
+  /**
+   * Applies an action to a draft of the current state.
+   *
+   * @param action A function that mutates the draft state.
+   * @param args Additional arguments to pass to the action.
+   */
+  applyDraftAction: <Args extends any[]>(
+    action: (draft: WritableDraft<TreeState<T>>, ...args: Args) => void,
+    ...args: Args
+  ) => void;
 }
 
 export function createLayout<T>(
-  options: Partial<LayoutOptions<T>>,
+  options: Partial<LayoutOptions<T>>
 ): LayoutInstance<T> {
   const coreInstance: LayoutInstance<T> = {
     options: {
@@ -51,41 +64,35 @@ export function createLayout<T>(
     },
     setOptions: (updater) => {
       const newOptions =
-        typeof updater === 'function' ? updater(coreInstance.options) : updater;
+        typeof updater === "function" ? updater(coreInstance.options) : updater;
 
       coreInstance.options = newOptions;
     },
     setState: (updater) => {
       coreInstance.options.onStateChange?.(updater);
     },
-    deleteNode: (id) => {
+    produce: (updater) => {
       coreInstance.setState((state) => {
         return produce(state, (draft) => {
-          divideAdapter.deleteNode(draft, id);
+          return updater(draft);
         });
       });
     },
-    addBestFitting: (data: T) => {
-      console.log(data);
+    applyDraftAction<Args extends any[]>(
+      action: (draft: WritableDraft<TreeState<T>>, ...args: Args) => void,
+      ...args: Args
+    ) {
       coreInstance.setState((state) => {
         return produce(state, (draft) => {
-          divideAdapter.greedySplit(draft, data);
+          action(draft, ...args);
         });
       });
     },
     applyInsert: (toMoveId, targetId, direction) => {
-      coreInstance.setState((state) => {
-        return produce(state, (draft) => {
-          divideAdapter.applyInsert(draft, toMoveId, targetId, direction);
-        });
-      });
+      coreInstance.applyDraftAction(applyInsert, toMoveId, targetId, direction);
     },
     updateGrowthValues: (growthValues) => {
-      coreInstance.setState((state) => {
-        return produce(state, (draft) => {
-          divideAdapter.updateGrowthValues(draft, growthValues);
-        });
-      });
+      coreInstance.applyDraftAction(updateGrowthValues, growthValues);
     },
     getDeepCopy: () => {
       return JSON.parse(JSON.stringify(coreInstance.getState()));
@@ -98,7 +105,7 @@ export function createLayout<T>(
 export function useLayout<T>(options: Partial<LayoutOptions<T>>) {
   const resolvedOptions: Partial<LayoutOptions<T>> = {
     state: {},
-    onStateChange: () => { },
+    onStateChange: () => {},
     ...options,
   };
 
@@ -123,7 +130,7 @@ export function useLayout<T>(options: Partial<LayoutOptions<T>>) {
     onStateChange: (updater) => {
       // Apply updater to current merged state
       const newState =
-        typeof updater === 'function' ? updater(mergedState) : updater;
+        typeof updater === "function" ? updater(mergedState) : updater;
       setState(newState);
       options.onStateChange?.(newState);
     },

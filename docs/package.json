@@ -10,6 +10,7 @@
     "preview": "rspress preview"
   },
   "dependencies": {
+    "@emotion/css": "^11.13.5",
     "@mantine/core": "^7.17.1",
     "@mantine/hooks": "^7.17.2",
     "rspress": "^1.40.2"

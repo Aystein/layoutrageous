@@ -93,9 +93,9 @@
 
 .layoutrageous-Dropzone-root {
   z-index: 1000;
-  background-color: rgba(128, 128, 128, 0.5);
-  box-shadow: 0px 0px 20px 10px rgba(128, 128, 128, 0.5);
+  background-color: rgba(128, 128, 128, 0.3);
   padding: 4px;
+  border: 1px solid rgba(128, 128, 128, 0.3);
 }
 
 .layoutrageous-Targetzone-root {

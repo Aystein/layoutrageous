@@ -1,7 +1,7 @@
 import { LayoutInstance } from './useLayout';
 import React from 'react';
 import { Tile } from './Tile';
-import { createTactileAdapter, DivideContentNode } from './TreeAdapter';
+import { deleteTile, DivideContentNode } from './layoutAdapter';
 import { useResizeObserver } from './useResizeObserver';
 import { recursiveMeasure } from './util';
 import { produce } from 'immer';
@@ -39,20 +39,18 @@ export function Dock<T>({
     return state.ids.filter((id) => state.nodes[id].type === 'content');
   }, [state.ids, state.nodes]);
 
-  const adapter = React.useMemo(() => createTactileAdapter({}), []);
-
   const { measurements, dividers } = React.useMemo(() => {
     if (dragging) {
       // Produce a new state with the dragging node removed
       const stateWithDragNodeRemoved = produce(state, (draft) => {
-        adapter.deleteNode(draft, dragging);
+        deleteTile(draft, dragging);
       });
 
       return recursiveMeasure(stateWithDragNodeRemoved);
     }
 
     return recursiveMeasure(state);
-  }, [adapter, dragging, state]);
+  }, [dragging, state]);
 
   return (
     <div className="layoutrageous-Dock-root" ref={setRef}>
